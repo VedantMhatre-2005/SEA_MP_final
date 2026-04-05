@@ -92,7 +92,6 @@ def _write_pdf_report(pdf_path: Path, summary: dict, duration, exitstatus: int, 
         y = height - 48
 
     def new_page_if_needed(required_lines: int = 1) -> None:
-        nonlocal y
         if y - (required_lines * 16) < 56:
             next_page()
 
@@ -182,7 +181,6 @@ def _write_pdf_report(pdf_path: Path, summary: dict, duration, exitstatus: int, 
         table_width = width - left - right_margin
         col_component = int(table_width * 0.28)
         col_status = int(table_width * 0.12)
-        col_details = table_width - col_component - col_status
         row_height = 44
 
         c.setFont("Helvetica-Bold", 10)
