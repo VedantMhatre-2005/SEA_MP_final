@@ -50,6 +50,14 @@ BACKEND_URL = os.getenv("ASPRAMS_BACKEND_URL", "http://localhost:8000")
 EDGE_DRIVER_PATH = os.getenv("ASPRAMS_EDGE_DRIVER_PATH", "").strip()
 
 
+def _service_is_available(url: str) -> bool:
+    try:
+        response = requests.get(url, timeout=5)
+    except requests.RequestException:
+        return False
+    return response.status_code < 500
+
+
 def _register_user(email: str, password: str, name: str) -> None:
     response = requests.post(
         f"{BACKEND_URL}/auth/register",
@@ -189,6 +197,12 @@ def _note_component_result(request: pytest.FixtureRequest, component: str, statu
 
 @pytest.mark.slow
 def test_edge_headless_smoke_flow(request: pytest.FixtureRequest):
+    if not _service_is_available(f"{BACKEND_URL}/health"):
+        pytest.skip("Backend server is not running, so the browser smoke test cannot execute.")
+
+    if not _service_is_available(FRONTEND_URL):
+        pytest.skip("Frontend server is not running, so the browser smoke test cannot execute.")
+
     email = f"selenium-{uuid.uuid4().hex[:8]}@example.com"
     password = "SeleniumPass123!"
     name = "Selenium User"
@@ -294,7 +308,7 @@ def test_edge_headless_smoke_flow(request: pytest.FixtureRequest):
         )
 
         wait.until(EC.presence_of_element_located((By.XPATH, "//h2[contains(., 'Consensus Reached') or contains(., 'Max Rounds')]")))
-        wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(., 'person-weeks')]") ))
+        wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(., 'person-weeks')]")))
 
         driver.find_element(By.XPATH, "//button[@type='button' and normalize-space()='Download PDF']").click()
 
