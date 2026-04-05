@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Manrope", "system-ui", "sans-serif"],
       },
       colors: {
         brand: {
@@ -24,10 +24,10 @@ export default {
           950: "#1e1b4b",
         },
         surface: {
-          DEFAULT: "#0f172a",
-          card:    "#1e293b",
-          border:  "#334155",
-          muted:   "#475569",
+          DEFAULT: "#f8fafc",
+          card:    "#ffffff",
+          border:  "#e2e8f0",
+          muted:   "#64748b",
         },
       },
       animation: {

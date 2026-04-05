@@ -17,6 +17,7 @@ const INITIAL_FORM = {
   team_size: "",
   duration: "",
   complexity: "medium",
+  available_budget: "",
 };
 
 /**
@@ -34,6 +35,8 @@ export default function ProjectForm({ onSubmit, loading }) {
       errs.team_size = "Team size must be between 1 and 100.";
     if (!form.duration || form.duration < 1 || form.duration > 365)
       errs.duration = "Duration must be between 1 and 365 weeks.";
+    if (!form.available_budget || form.available_budget < 1000)
+      errs.available_budget = "Budget must be at least Rs 1,000.";
     return errs;
   };
 
@@ -52,6 +55,7 @@ export default function ProjectForm({ onSubmit, loading }) {
       team_size:   parseInt(form.team_size, 10),
       duration:    parseInt(form.duration, 10),
       complexity:  form.complexity,
+      available_budget: parseFloat(form.available_budget),
     });
   };
 
@@ -60,7 +64,7 @@ export default function ProjectForm({ onSubmit, loading }) {
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1.5">
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">
           Project Description <span className="text-brand-400">*</span>
         </label>
         <textarea
@@ -77,13 +81,13 @@ export default function ProjectForm({ onSubmit, loading }) {
       </div>
 
       {/* Team size + Duration */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">
             Team Size <span className="text-brand-400">*</span>
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-muted text-sm">👥</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">👥</span>
             <input
               type="number"
               name="team_size"
@@ -100,11 +104,11 @@ export default function ProjectForm({ onSubmit, loading }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
-            Duration <span className="text-slate-500 font-normal">(weeks)</span> <span className="text-brand-400">*</span>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            Duration <span className="text-slate-500 font-normal">(weeks)</span> <span className="text-brand-600">*</span>
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-muted text-sm">📅</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">📅</span>
             <input
               type="number"
               name="duration"
@@ -121,10 +125,34 @@ export default function ProjectForm({ onSubmit, loading }) {
         </div>
       </div>
 
+      {/* Budget */}
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          Available Budget (INR) <span className="text-brand-600">*</span>
+        </label>
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">Rs</span>
+          <input
+            type="number"
+            name="available_budget"
+            min="1000"
+            step="1"
+            value={form.available_budget}
+            onChange={handleChange}
+            placeholder="e.g. 1000000"
+            className={`form-input pl-9 ${errors.available_budget ? "border-red-500 focus:ring-red-500" : ""}`}
+          />
+        </div>
+        {errors.available_budget && (
+          <p className="mt-1.5 text-xs text-red-400">{errors.available_budget}</p>
+        )}
+        <p className="mt-1 text-xs text-slate-500">Minimum allowed: Rs 1,000</p>
+      </div>
+
       {/* Complexity */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
-          Complexity Level <span className="text-brand-400">*</span>
+        <label className="block text-sm font-medium text-slate-700 mb-2">
+          Complexity Level <span className="text-brand-600">*</span>
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {COMPLEXITY_OPTIONS.map((opt) => (
@@ -135,13 +163,13 @@ export default function ProjectForm({ onSubmit, loading }) {
               title={opt.desc}
               className={`relative rounded-xl px-3 py-3 text-sm font-medium border transition-all duration-200 text-center
                 ${form.complexity === opt.value
-                  ? "bg-brand-600/30 border-brand-500 text-brand-300 shadow-md shadow-brand-900/30"
-                  : "bg-surface border-surface-border text-slate-400 hover:border-surface-muted hover:text-slate-300"
+                  ? "bg-brand-50 border-brand-300 text-brand-700 shadow-sm"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700"
                 }`}
             >
               {opt.label}
               {form.complexity === opt.value && (
-                <span className="absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-400" />
+                <span className="absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-600" />
               )}
             </button>
           ))}

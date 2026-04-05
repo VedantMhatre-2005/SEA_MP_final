@@ -20,23 +20,23 @@ function AgentCard({ label, effort, decision, reason, side }) {
     <div
       className={`rounded-xl border p-4 flex-1 min-w-0 animate-fade-in
       ${isLeft
-        ? "border-brand-700/50 bg-brand-950/40"
-        : "border-amber-800/40 bg-amber-950/20"
+        ? "border-brand-200 bg-brand-50"
+        : "border-amber-200 bg-amber-50"
       }`}
     >
       <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-        <span className={`text-xs font-bold uppercase tracking-wider ${isLeft ? "text-brand-400" : "text-amber-400"}`}>
+        <span className={`text-xs font-bold uppercase tracking-wider ${isLeft ? "text-brand-700" : "text-amber-700"}`}>
           {label}
         </span>
         <DecisionBadge decision={decision} />
       </div>
 
-      <p className={`text-2xl font-bold mb-2 ${isLeft ? "text-brand-300" : "text-amber-300"}`}>
+      <p className={`text-2xl font-bold mb-2 ${isLeft ? "text-brand-700" : "text-amber-700"}`}>
         {effort.toFixed(1)}
-        <span className="text-sm font-normal text-slate-400 ml-1">person-wks</span>
+        <span className="text-sm font-normal text-slate-500 ml-1">person-wks</span>
       </p>
 
-      <p className="text-xs text-slate-400 leading-relaxed line-clamp-4" title={reason}>
+      <p className="text-xs text-slate-600 leading-relaxed line-clamp-4" title={reason}>
         {reason}
       </p>
     </div>
@@ -51,8 +51,8 @@ export default function NegotiationTimeline({ rounds }) {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-        <span className="w-7 h-7 rounded-lg bg-brand-600/30 flex items-center justify-center text-brand-300 text-sm">🤝</span>
+      <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+        <span className="w-7 h-7 rounded-lg bg-brand-100 flex items-center justify-center text-brand-700 text-sm">🤝</span>
         Negotiation Timeline
       </h2>
 

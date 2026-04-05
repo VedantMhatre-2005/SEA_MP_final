@@ -13,7 +13,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config.settings import ALLOWED_ORIGINS
-from routes import analyze, health
+from db.mongo import init_indexes
+from routes import analyze, auth, health, history
 
 
 # ─── Logging ─────────────────────────────────────────────────────────────────
@@ -30,6 +31,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Startup / shutdown lifecycle hooks."""
     logger.info("🚀 ASPRAMS API starting up...")
+    init_indexes()
     yield
     logger.info("🛑 ASPRAMS API shutting down.")
 
@@ -56,7 +58,9 @@ app.add_middleware(
 
 # ─── Routers ──────────────────────────────────────────────────────────────────
 app.include_router(health.router, tags=["System"])
+app.include_router(auth.router, tags=["Auth"])
 app.include_router(analyze.router, tags=["Simulation"])
+app.include_router(history.router, tags=["History"])
 
 
 # ─── Root ─────────────────────────────────────────────────────────────────────
@@ -73,4 +77,4 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)

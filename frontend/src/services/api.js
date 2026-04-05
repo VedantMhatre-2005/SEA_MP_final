@@ -12,11 +12,14 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const api = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
-  timeout: 120_000, // 2 min — Gemini calls can take time
 });
 
 // ─── Request interceptor: log outgoing requests in dev ────────────────────────
 api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("asprams_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   if (import.meta.env.DEV) {
     console.debug(`[API] ${config.method?.toUpperCase()} ${config.url}`, config.data);
   }
@@ -43,6 +46,14 @@ api.interceptors.response.use(
  * @returns {Promise<import('../types').NegotiationResult>}
  */
 export const analyzeProject = (data) => api.post("/analyze", data).then((r) => r.data);
+
+export const registerUser = (data) => api.post("/auth/register", data).then((r) => r.data);
+
+export const loginUser = (data) => api.post("/auth/login", data).then((r) => r.data);
+
+export const getCurrentUser = () => api.get("/auth/me").then((r) => r.data);
+
+export const getHistory = () => api.get("/history").then((r) => r.data);
 
 /**
  * Check API health.
